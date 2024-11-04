@@ -1,0 +1,6 @@
+title-hidden = true
+frame = "transparent"
+
+[font]
+  normal = ["FiraCode Nerd Font Mono"]
+  size = 15.5
