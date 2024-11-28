@@ -1,9 +1,9 @@
 /*/*
 /*
 
-!gitui/
-!nvim/
-!neovide/
-!yazi/
+!gitui/**
+!nvim/**
+!neovide/**
+!yazi/**
 
 .git/
