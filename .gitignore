@@ -8,5 +8,6 @@
 !ghostty/**
 !kitty/**
 !zsh/**
+!lazygit/**
 
 .git/
