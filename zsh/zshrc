@@ -7,7 +7,9 @@ zplug "mafredri/zsh-async", from:github
 zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
 zplug "zdharma/fast-syntax-highlighting", as:plugin, defer:2
 zplug "zsh-users/zsh-autosuggestions", as:plugin, defer:2
-zplug "jeffreytse/zsh-vi-mode"
+if [[ -z "$NVIM" ]]; then
+    zplug "jeffreytse/zsh-vi-mode"
+fi
 zplug load
 # Install plugins if there are plugins that have not been installed
 if ! zplug check --verbose; then
