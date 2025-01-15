@@ -11,7 +11,7 @@ return {
         if not (ok and stats) then
           return
         end
-        if stats.size / 1024 > 100 then
+        if stats.size / 1024 > 200 then
           return true
         end
       end,
