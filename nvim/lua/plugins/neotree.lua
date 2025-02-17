@@ -5,6 +5,12 @@ return {
       open_files_do_not_replace_types = { "Trouble", "trouble", "qf", "Outline" },
       filesystem = {
         follow_current_file = { enabled = false },
+        window = {
+          mappings = {
+            -- disable fuzzy finder
+            ["/"] = "noop",
+          },
+        },
       },
     },
     keys = {
