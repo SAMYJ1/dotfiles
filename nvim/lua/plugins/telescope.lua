@@ -32,30 +32,30 @@ local ts_args_for_grep = function()
 end
 
 return {
-  {
-    "nvim-telescope/telescope-file-browser.nvim",
-    dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
-  },
-  {
-    "nvim-telescope/telescope-live-grep-args.nvim",
-  },
-  {
-    "nvim-telescope/telescope.nvim",
-    opts = {
-      pickers = {
-        live_grep = {
-          mappings = {
-            i = {
-              ["<C-f>"] = ts_select_dir_for_grep,
-              ["<C-k>"] = ts_args_for_grep,
-            },
-            n = {
-              ["<C-f>"] = ts_select_dir_for_grep,
-              ["<C-k>"] = ts_args_for_grep,
-            },
-          },
-        },
-      },
-    },
-  },
+  -- {
+  --   "nvim-telescope/telescope-file-browser.nvim",
+  --   dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
+  -- },
+  -- {
+  --   "nvim-telescope/telescope-live-grep-args.nvim",
+  -- },
+  -- {
+  --   "nvim-telescope/telescope.nvim",
+  --   opts = {
+  --     pickers = {
+  --       live_grep = {
+  --         mappings = {
+  --           i = {
+  --             ["<C-f>"] = ts_select_dir_for_grep,
+  --             ["<C-k>"] = ts_args_for_grep,
+  --           },
+  --           n = {
+  --             ["<C-f>"] = ts_select_dir_for_grep,
+  --             ["<C-k>"] = ts_args_for_grep,
+  --           },
+  --         },
+  --       },
+  --     },
+  --   },
+  -- },
 }
