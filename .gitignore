@@ -9,5 +9,6 @@
 !kitty/**
 !zsh/**
 !lazygit/**
+!karabiner/**
 
 .git/
