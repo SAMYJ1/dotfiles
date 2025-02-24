@@ -27,4 +27,21 @@ return {
       },
     },
   },
+  keys = {
+    {
+      "<leader>bd",
+      function()
+        local bufname = vim.api.nvim_buf_get_name(0) -- Get the current buffer's name
+        local scratch_dir = vim.fn.stdpath("data") .. "/scratch" -- Default scratch directory
+
+        Snacks.bufdelete()
+        if bufname and bufname:sub(1, #scratch_dir) == scratch_dir then
+          -- Buffer is a saved scratch buffer
+          os.remove(bufname) -- Delete the file from disk
+          print("Deleted scratch buffer and file: " .. bufname)
+        end
+      end,
+      desc = "Delete (Scratch) Buffer",
+    },
+  },
 }
