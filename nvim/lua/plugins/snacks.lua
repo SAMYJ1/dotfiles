@@ -43,6 +43,44 @@ return {
           },
         },
       },
+      scratch = {
+        win_by_ft = {
+          typescript = {
+            keys = {
+              ["source"] = {
+                "<cr>",
+                function()
+                  local file = vim.api.nvim_buf_get_name(0)
+
+                  -- TSX only accepts .ts files, not .typescript
+                  local tsFile = file:gsub("%.typescript$", ".ts")
+                  os.rename(file, tsFile)
+
+                  local shell_command = {
+                    "ts-node",
+                    "--transpile-only",
+                    "--compiler-options",
+                    '{"module":"CommonJS","esModuleInterop":true}',
+                    tsFile,
+                  }
+
+                  local res = vim.system(shell_command, { text = true }):wait()
+
+                  os.rename(tsFile, file)
+                  if res.code ~= 0 then
+                    Snacks.notify.error(res.stderr or "Unknown error.")
+                    return
+                  end
+
+                  Snacks.notify(res.stdout)
+                end,
+                desc = "Source buffer",
+                mode = { "n", "x" },
+              },
+            },
+          },
+        },
+      },
     },
     keys = {
       {
