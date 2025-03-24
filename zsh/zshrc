@@ -1,7 +1,15 @@
+export ZSH="$HOME/.oh-my-zsh"
+
 # disable oh-my-zsh themes for pure prompt
 ZSH_THEME=""
+ZSH_DISABLE_COMPFIX=true
 source $ZSH/oh-my-zsh.sh
-export ZPLUG_HOME=/opt/homebrew/opt/zplug
+
+fpath+=("$(brew --prefix)/share/zsh/site-functions")
+
+export BREW_HOME=$(brew --prefix)
+
+export ZPLUG_HOME=$BREW_HOME/opt/zplug
 source $ZPLUG_HOME/init.zsh
 zplug "mafredri/zsh-async", from:github
 zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
@@ -20,3 +28,17 @@ if ! zplug check --verbose; then
 fi
 
 zstyle :prompt:pure:git:branch color green
+
+plugins=(git)
+
+export LC_ALL=en_US.UTF-8  
+export LANG=en_US.UTF-8
+
+# proxy list
+alias proxy='export http_proxy=http://127.0.0.1:7890
+export https_proxy=$http_proxy'
+alias unproxy='unset all_proxy http_proxy https_proxy'
+
+alias vim='nvim'
+alias zz='yazi'
+eval "$(zoxide init zsh)"
