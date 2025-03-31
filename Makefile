@@ -1,6 +1,6 @@
 
 # Define applications
-CLI_APPS = zplug ripgrep fzf zoxide neovim lazygit yazi
+CLI_APPS = zplug rust go ripgrep fzf zoxide neovim lazygit yazi
 GUI_APPS = karabiner-Elements kitty
 
 # Check if Homebrew is installed
@@ -9,6 +9,7 @@ check_brew:
 
 # Install or upgrade command-line applications
 install_upgrade_cli_apps: check_brew
+	brew tap daipeihust/tap
 	@for app in $(CLI_APPS); do \
 		if brew list $$app &>/dev/null; then \
 			echo "$$app is installed. Upgrading..."; \

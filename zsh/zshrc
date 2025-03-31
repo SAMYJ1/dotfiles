@@ -1,9 +1,15 @@
+export PATH=$PATH:/opt/homebrew/bin
 export ZSH="$HOME/.oh-my-zsh"
 
 # disable oh-my-zsh themes for pure prompt
 ZSH_THEME=""
 ZSH_DISABLE_COMPFIX=true
+
+# zsh plugins
+plugins=(git)
+
 source $ZSH/oh-my-zsh.sh
+# oh-my-zsh config end
 
 fpath+=("$(brew --prefix)/share/zsh/site-functions")
 
@@ -28,8 +34,6 @@ if ! zplug check --verbose; then
 fi
 
 zstyle :prompt:pure:git:branch color green
-
-plugins=(git)
 
 export LC_ALL=en_US.UTF-8  
 export LANG=en_US.UTF-8
