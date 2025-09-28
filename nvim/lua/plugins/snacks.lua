@@ -8,23 +8,23 @@ return {
           header = [[
 ██╗   ██╗ ███████╗  ██████╗  ██████╗  ██████╗  ███████╗
 ██║   ██║ ██╔════╝ ██╔════╝ ██╔═══██╗ ██╔══██╗ ██╔════╝
-██║   ██║ ███████╗ ██║      ██║   ██║ ██║  ██║ █████╗  
-╚██╗ ██╔╝ ╚════██║ ██║      ██║   ██║ ██║  ██║ ██╔══╝  
+██║   ██║ ███████╗ ██║      ██║   ██║ ██║  ██║ █████╗
+╚██╗ ██╔╝ ╚════██║ ██║      ██║   ██║ ██║  ██║ ██╔══╝
  ╚████╔╝  ███████║ ╚██████╗ ╚██████╔╝ ██████╔╝ ███████╗
   ╚═══╝   ╚══════╝  ╚═════╝  ╚═════╝  ╚═════╝  ╚══════╝
  ]],
-        -- stylua: ignore
-        ---@type snacks.dashboard.Item[]
-        keys = {
-          { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
-          { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
-          { icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
-          { icon = " ", key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
-          { icon = " ", key = "c", desc = "Config", action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})" },
-          { icon = " ", key = "s", desc = "Restore Session", section = "session" },
-          { icon = "󰒲 ", key = "l", desc = "Lazy", action = ":Lazy" },
-          { icon = " ", key = "q", desc = "Quit", action = ":qa" },
-        },
+          -- stylua: ignore
+          ---@type snacks.dashboard.Item[]
+          keys = {
+            { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
+            { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
+            { icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
+            { icon = " ", key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
+            { icon = " ", key = "c", desc = "Config", action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})" },
+            { icon = " ", key = "s", desc = "Restore Session", section = "session" },
+            { icon = "󰒲 ", key = "l", desc = "Lazy", action = ":Lazy" },
+            { icon = " ", key = "q", desc = "Quit", action = ":qa" },
+          },
         },
       },
       picker = {
@@ -50,6 +50,7 @@ return {
               ["source"] = {
                 "<cr>",
                 function()
+                  vim.api.nvim_command("w")
                   local file = vim.api.nvim_buf_get_name(0)
 
                   -- TSX only accepts .ts files, not .typescript
@@ -66,7 +67,36 @@ return {
 
                   local res = vim.system(shell_command, { text = true }):wait()
 
-                  os.rename(tsFile, file)
+                  -- os.rename(tsFile, file)
+                  if res.code ~= 0 then
+                    Snacks.notify.error(res.stderr or "Unknown error.")
+                    return
+                  end
+
+                  Snacks.notify(res.stdout)
+                end,
+                desc = "Source buffer",
+                mode = { "n", "x" },
+              },
+            },
+          },
+          javascript = {
+            keys = {
+              ["source"] = {
+                "<cr>",
+                function()
+                  vim.api.nvim_command("w")
+                  local file = vim.api.nvim_buf_get_name(0)
+                  local jsFile = file:gsub("%.javascript$", ".js")
+                  os.rename(file, jsFile)
+                  local shell_command = {
+                    "node",
+                    jsFile,
+                  }
+
+                  local res = vim.system(shell_command, { text = true }):wait()
+
+                  os.rename(jsFile, file)
                   if res.code ~= 0 then
                     Snacks.notify.error(res.stderr or "Unknown error.")
                     return

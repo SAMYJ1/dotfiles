@@ -44,5 +44,6 @@ export https_proxy=$http_proxy'
 alias unproxy='unset all_proxy http_proxy https_proxy'
 
 alias vim='nvim'
+alias v='nvim'
 alias zz='yazi'
 eval "$(zoxide init zsh)"
