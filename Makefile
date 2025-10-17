@@ -1,7 +1,7 @@
 
 # Define applications
-CLI_APPS = zplug rust go ripgrep fzf zoxide neovim lazygit yazi
-GUI_APPS = karabiner-Elements kitty
+CLI_APPS = zplug rust go ripgrep fzf zoxide neovim lazygit yazi tmux 
+GUI_APPS = karabiner-Elements kitty ghostty
 
 # Check if Homebrew is installed
 check_brew:

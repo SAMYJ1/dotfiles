@@ -1,0 +1,7 @@
+[submodule "ghostty/shader-playground"]
+	path = ghostty/shader-playground
+	url = git@github.com:KroneCorylus/ghostty-shader-playground.git
+
+[submodule "tmux/plugins/tpm"]
+	path = tmux/plugins/tpm
+	url = git@github.com:tmux-plugins/tpm.git

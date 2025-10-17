@@ -1,12 +1,23 @@
 # Appearance
 theme = Catppuccin Mocha
 font-family = "FiraCode Nerd Font Mono"
-font-size = 14
+# font-family = "Lantinghei SC"
+font-family = "PingFang SC"
+font-family = "Menlo"
+font-family-bold = "FiraCode Nerd Font Mono SemBd"
+font-family-italic = "FiraCode Nerd Font Mono Reg"
+font-family-italic = "PingFang SC Regular"
+# font-style = "SemBd"
+font-synthetic-style = false
+font-thicken = true
+font-thicken-strength = 10
+adjust-cell-height = 20%
+font-size = 14.5
 window-height = 40
 window-width = 120
 macos-titlebar-style = tabs
 background-opacity = 0.85
-background-blur-radius = 20
+background-blur = 10
 gtk-tabs-location = hidden
 scrollback-limit = 10_000
 window-theme = ghostty
@@ -20,3 +31,4 @@ custom-shader = shader-playground/shaders/cursor_smear_gradient.glsl
 # custom-shader = shader-playground/shaders/cursor_blaze.glsl
 # custom-shader = shader-playground/shaders/cursor_blaze_tapered.glsl
 # custom-shader = shader-playground/shaders/cursor_frozen.glsl
+
