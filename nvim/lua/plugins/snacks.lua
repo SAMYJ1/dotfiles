@@ -34,6 +34,7 @@ return {
               ["<c-l>"] = { "loclist", mode = { "i", "n" } },
               ["<Esc>"] = { "close", mode = { "n", "i" } },
               ["<c-/>"] = { "toggle_help_input", mode = { "n", "i" } },
+              ["<c-_>"] = { "toggle_help_input", mode = { "n", "i" } },
             },
           },
           list = {
@@ -41,6 +42,9 @@ return {
               ["<c-l>"] = { "loclist", mode = { "i", "n" } },
             },
           },
+        },
+        matcher = {
+          history_bonus = true,
         },
       },
       scratch = {
