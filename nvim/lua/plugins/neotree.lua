@@ -14,9 +14,10 @@ return {
       },
     },
     keys = {
-      { "<leader>fe", false },
+      { "<leader>e", false },
+      { "<leader>E", false },
       {
-        "<leader>e",
+        "<leader>fe",
         function()
           require("neo-tree.command").execute({ toggle = true })
         end,

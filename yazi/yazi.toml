@@ -1,4 +1,16 @@
 [opener]
-edit = [
-	{ run = 'nvim "$@"', block = true },
-]
+edit = [{ run = 'nvim "$@"', block = true }]
+
+[[mgr.prepend_keymap]]
+on = ["g", "r"]
+run = 'shell -- ya emit cd "$(git rev-parse --show-toplevel)"'
+
+[[plugin.prepend_fetchers]]
+id = "git"
+url = "*"
+run = "git"
+
+[[plugin.prepend_fetchers]]
+id = "git"
+url = "*/"
+run = "git"

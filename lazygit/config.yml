@@ -1,2 +1,5 @@
 os:
-  editPreset: 'nvim-remote'
+  edit: 'nvim --server "$NVIM" --remote-tab {{filename}}'
+  editAtLine: 'nvim --server "$NVIM" --remote-tab {{filename}}; [ -z "$NVIM" ] || nvim --server "$NVIM" --remote-send ":{{line}}<CR>"'
+  editAtLineAndWait: 'nvim +{{line}} {{filename}}'
+promptToReturnFromSubprocess: false

@@ -1,5 +1,6 @@
 export PATH=$PATH:/opt/homebrew/bin
 export ZSH="$HOME/.oh-my-zsh"
+export XDG_CONFIG_HOME="$HOME/.config"
 
 # disable oh-my-zsh themes for pure prompt
 ZSH_THEME=""
@@ -43,8 +44,10 @@ alias proxy='export http_proxy=http://127.0.0.1:7890
 export https_proxy=$http_proxy'
 alias unproxy='unset all_proxy http_proxy https_proxy'
 
+export EDITOR=nvim
 alias vim='nvim'
 alias v='nvim'
 alias t='tmux'
 alias zz='yazi'
+alias gg=lazygit
 eval "$(zoxide init zsh)"
