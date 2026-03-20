@@ -51,3 +51,11 @@ alias t='tmux'
 alias zz='yazi'
 alias gg=lazygit
 eval "$(zoxide init zsh)"
+
+# codex CLI: fallback path + completion for zsh
+if [ -x "/Applications/Codex.app/Contents/Resources/codex" ]; then
+  export PATH="/Applications/Codex.app/Contents/Resources:$PATH"
+fi
+if command -v codex >/dev/null 2>&1; then
+  source <(codex completion zsh)
+fi

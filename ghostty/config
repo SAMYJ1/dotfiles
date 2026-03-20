@@ -17,16 +17,33 @@ window-height = 40
 window-width = 120
 # macos-titlebar-style = tabs
 macos-titlebar-style = hidden
-background-opacity = 0.85
+background-opacity = 0.95
 background-blur = 10
 gtk-tabs-location = hidden
-scrollback-limit = 10_000
+scrollback-limit = 50_000_000
+scrollbar = system
 window-theme = ghostty
 window-decoration = auto
 window-show-tab-bar = never
 clipboard-read = allow
 clipboard-paste-protection = false
 shell-integration = zsh
+cursor-click-to-move = true
+
+# Long-running command notifications
+notify-on-command-finish = unfocused
+notify-on-command-finish-action = no-bell,notify
+notify-on-command-finish-after = 15s
+
+# Prompt navigation outside tmux copy-mode
+keybind = super+shift+k=jump_to_prompt:-1
+keybind = super+shift+j=jump_to_prompt:1
+
+# Quick Terminal
+keybind = global:super+/=toggle_quick_terminal
+quick-terminal-position = top
+quick-terminal-size = 40%
+quick-terminal-autohide = true
 
 # custom-shader = shader-playground/shaders/cursor_smear.glsl
 # custom-shader = shader-playground/shaders/cursor_smear_fade.glsl
@@ -34,4 +51,3 @@ custom-shader = shader-playground/shaders/cursor_smear_gradient.glsl
 # custom-shader = shader-playground/shaders/cursor_blaze.glsl
 # custom-shader = shader-playground/shaders/cursor_blaze_tapered.glsl
 # custom-shader = shader-playground/shaders/cursor_frozen.glsl
-

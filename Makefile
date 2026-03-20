@@ -1,36 +1,116 @@
+.DEFAULT_GOAL := bootstrap
 
-# Define applications
-CLI_APPS = zplug rust go ripgrep fzf zoxide neovim lazygit yazi tmux 
-GUI_APPS = karabiner-Elements kitty ghostty
+SHELL := /bin/zsh
 
-# Check if Homebrew is installed
+CLI_APPS := zplug rust go ripgrep fzf zoxide neovim lazygit yazi tmux
+GUI_APPS := karabiner-elements ghostty hammerspoon
+
+HAMMERSPOON_SOURCE := $(HOME)/.config/hammerspoon
+HAMMERSPOON_LINK := $(HOME)/.hammerspoon
+TMUX_SOURCE := $(HOME)/.config/tmux/tmux.conf
+TMUX_LINK := $(HOME)/.tmux.conf
+
+.PHONY: bootstrap install check_brew install-packages install_upgrade_cli_apps install_upgrade_gui_apps link-configs link-hammerspoon link-tmux check-configs notes
+
+define ensure_symlink
+	@src="$(1)"; dst="$(2)"; \
+	if [ ! -e "$$src" ]; then \
+		echo "Missing source: $$src"; \
+		exit 1; \
+	fi; \
+	if [ -L "$$dst" ] && [ "$$(readlink "$$dst")" = "$$src" ]; then \
+		echo "$$dst already linked to $$src"; \
+	else \
+		if [ -e "$$dst" ] || [ -L "$$dst" ]; then \
+			backup="$$dst.bak.$$(date +%Y%m%d-%H%M%S)"; \
+			echo "Backing up $$dst to $$backup"; \
+			mv "$$dst" "$$backup"; \
+		fi; \
+		ln -s "$$src" "$$dst"; \
+		echo "Linked $$dst -> $$src"; \
+	fi
+endef
+
+bootstrap: install-packages link-configs check-configs notes
+
+install: bootstrap
+
 check_brew:
-	@which brew > /dev/null || (echo "Homebrew is not installed. Installing..."; /bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)")
+	@which brew >/dev/null || (echo "Homebrew is not installed. Installing..."; /bin/bash -c "$$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)")
 
-# Install or upgrade command-line applications
+install-packages: install_upgrade_cli_apps install_upgrade_gui_apps
+
 install_upgrade_cli_apps: check_brew
 	brew tap daipeihust/tap
 	@for app in $(CLI_APPS); do \
-		if brew list $$app &>/dev/null; then \
+		if brew list $$app >/dev/null 2>&1; then \
 			echo "$$app is installed. Upgrading..."; \
 			brew upgrade $$app; \
 		else \
 			echo "Installing $$app..."; \
 			brew install $$app; \
-		fi \
+		fi; \
 	done
 
-# Install or upgrade GUI applications
 install_upgrade_gui_apps: check_brew
 	@for app in $(GUI_APPS); do \
-		if brew list --cask $$app &>/dev/null; then \
+		if brew list --cask $$app >/dev/null 2>&1; then \
 			echo "$$app is installed. Upgrading..."; \
 			brew upgrade --cask $$app; \
 		else \
 			echo "Installing $$app..."; \
 			brew install --cask $$app; \
-		fi \
+		fi; \
 	done
 
-# Install or upgrade all applications
-install: install_upgrade_cli_apps install_upgrade_gui_apps
+link-configs: link-hammerspoon link-tmux
+
+link-hammerspoon:
+	$(call ensure_symlink,$(HAMMERSPOON_SOURCE),$(HAMMERSPOON_LINK))
+
+link-tmux:
+	$(call ensure_symlink,$(TMUX_SOURCE),$(TMUX_LINK))
+
+check-configs:
+	@echo "== Brew =="; \
+	if command -v brew >/dev/null 2>&1; then \
+		echo "brew: $$(command -v brew)"; \
+	else \
+		echo "brew: missing"; \
+	fi
+	@echo ""; \
+	echo "== Versions =="; \
+	if command -v tmux >/dev/null 2>&1; then \
+		echo "$$(env -u TMUX tmux -V)"; \
+	else \
+		echo "tmux: missing"; \
+	fi; \
+	if command -v ghostty >/dev/null 2>&1; then \
+		echo "$$(ghostty +version | sed -n '1p')"; \
+	else \
+		echo "ghostty: missing"; \
+	fi; \
+	if [ -d "/Applications/Hammerspoon.app" ]; then \
+		echo "hammerspoon: installed"; \
+	else \
+		echo "hammerspoon: missing"; \
+	fi
+	@echo ""; \
+	echo "== Symlinks =="; \
+	if [ -L "$(HAMMERSPOON_LINK)" ]; then \
+		echo "$(HAMMERSPOON_LINK) -> $$(readlink "$(HAMMERSPOON_LINK)")"; \
+	else \
+		echo "$(HAMMERSPOON_LINK): missing or not a symlink"; \
+	fi; \
+	if [ -L "$(TMUX_LINK)" ]; then \
+		echo "$(TMUX_LINK) -> $$(readlink "$(TMUX_LINK)")"; \
+	else \
+		echo "$(TMUX_LINK): missing or not a symlink"; \
+	fi
+
+notes:
+	@echo ""; \
+	echo "== Manual Follow-up =="; \
+	echo "- Hammerspoon may still need macOS Accessibility permission."; \
+	echo "- Karabiner-Elements may still need macOS Input Monitoring and Driver approval."; \
+	echo "- Ghostty and tmux configs are managed from ~/.config."

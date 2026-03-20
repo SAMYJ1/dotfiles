@@ -1,8 +1,48 @@
+local function update_preview_title(picker, item)
+  if item and item.file and picker.preview then
+    vim.schedule(function()
+      local filename = vim.fn.fnamemodify(item.file, ":t")
+      local fullpath = vim.fn.fnamemodify(item.file, ":p:~:.")
+
+      -- 优先级1：检查预览窗口宽度是否足够显示完整路径
+      local preview_win = picker.preview.win
+      local preview_width = preview_win and preview_win.win and vim.api.nvim_win_get_width(preview_win.win) or 80
+      local max_path_width = preview_width - 4
+
+      if #fullpath > max_path_width then
+        -- 预览窗口宽度不够，只显示文件名
+        picker.preview:set_title(filename)
+        picker:update_titles()
+        return
+      end
+
+      -- 优先级2：检查左侧路径是否被折叠
+      local list_win = picker.list and picker.list.win
+      local list_width = list_win and list_win.win and vim.api.nvim_win_get_width(list_win.win) or 60
+      local available_width = math.max(list_width - 8, 20)
+
+      local path = Snacks.picker.util.path(item) or item.file
+      local formatted = Snacks.picker.util.truncpath(
+        path,
+        available_width,
+        { cwd = picker:cwd(), kind = picker.opts.formatters.file.truncate }
+      )
+      local is_truncated = formatted:find("…") ~= nil
+
+      -- 宽度够且被折叠时显示完整路径，否则显示文件名
+      local title = is_truncated and fullpath or filename
+      picker.preview:set_title(title)
+      picker:update_titles()
+    end)
+  end
+end
+
 return {
   {
     "snacks.nvim",
     opts = {
       scroll = { enabled = false },
+      image = { enabled = true },
       dashboard = {
         preset = {
           header = [[
@@ -45,6 +85,14 @@ return {
         },
         matcher = {
           history_bonus = true,
+        },
+        -- 在预览显示后更新标题
+        on_change = update_preview_title,
+        sources = {
+          grep = { on_change = update_preview_title },
+          grep_buffers = { on_change = update_preview_title },
+          grep_word = { on_change = update_preview_title },
+          live_grep = { on_change = update_preview_title },
         },
       },
       scratch = {
