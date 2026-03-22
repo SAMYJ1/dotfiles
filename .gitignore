@@ -32,6 +32,10 @@ karabiner/automatic_backups/
 !/nvim/
 !/nvim/**
 
+!/tmux/
+!/tmux/**
+tmux/docs
+
 !/yazi/
 !/yazi/**
 yazi/*.toml-*
