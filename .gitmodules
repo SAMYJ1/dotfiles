@@ -2,6 +2,10 @@
 	path = ghostty/shader-playground
 	url = git@github.com:KroneCorylus/ghostty-shader-playground.git
 
+[submodule "hammerspoon/Spoons/PaperWM.spoon"]
+	path = hammerspoon/Spoons/PaperWM.spoon
+	url = git@github.com:mogenson/PaperWM.spoon.git
+
 [submodule "tmux/plugins/tpm"]
 	path = tmux/plugins/tpm
 	url = git@github.com:tmux-plugins/tpm.git

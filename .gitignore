@@ -35,6 +35,8 @@ karabiner/automatic_backups/
 !/tmux/
 !/tmux/**
 tmux/docs
+tmux/plugins/*
+!tmux/plugins/tpm
 
 !/yazi/
 !/yazi/**

@@ -9,8 +9,9 @@ HAMMERSPOON_SOURCE := $(HOME)/.config/hammerspoon
 HAMMERSPOON_LINK := $(HOME)/.hammerspoon
 TMUX_SOURCE := $(HOME)/.config/tmux/tmux.conf
 TMUX_LINK := $(HOME)/.tmux.conf
+TMUX_TPM_DIR := $(HOME)/.config/tmux/plugins/tpm
 
-.PHONY: bootstrap install check_brew install-packages install_upgrade_cli_apps install_upgrade_gui_apps link-configs link-hammerspoon link-tmux check-configs notes
+.PHONY: bootstrap install check_brew install-packages install_upgrade_cli_apps install_upgrade_gui_apps link-configs link-hammerspoon link-tmux update-submodules install-tmux-plugins check-configs notes
 
 define ensure_symlink
 	@src="$(1)"; dst="$(2)"; \
@@ -31,7 +32,7 @@ define ensure_symlink
 	fi
 endef
 
-bootstrap: install-packages link-configs check-configs notes
+bootstrap: install-packages link-configs update-submodules install-tmux-plugins check-configs notes
 
 install: bootstrap
 
@@ -70,6 +71,17 @@ link-hammerspoon:
 
 link-tmux:
 	$(call ensure_symlink,$(TMUX_SOURCE),$(TMUX_LINK))
+
+update-submodules:
+	git submodule update --init --recursive
+
+install-tmux-plugins:
+	@if [ ! -x "$(TMUX_TPM_DIR)/bin/install_plugins" ]; then \
+		echo "Missing TPM installer: $(TMUX_TPM_DIR)/bin/install_plugins"; \
+		echo "Run 'make update-submodules' first."; \
+		exit 1; \
+	fi
+	@env -u TMUX "$(TMUX_TPM_DIR)/bin/install_plugins"
 
 check-configs:
 	@echo "== Brew =="; \
