@@ -47,9 +47,12 @@ yazi/*.toml-*
 
 !/hammerspoon/
 hammerspoon/*
+hammerspoon/local/
 !hammerspoon/init.lua
 !hammerspoon/Spoons/
 !hammerspoon/Spoons/**
+!hammerspoon/modules/
+!hammerspoon/modules/**
 hammerspoon/*.bak*
 
 .git/

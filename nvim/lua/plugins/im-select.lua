@@ -4,7 +4,7 @@ return {
     lazy = false,
     opts = {
       default_im_select = "com.apple.keylayout.ABC",
-      default_command = "im-select",
+      default_command = "macism",
     },
   },
 }

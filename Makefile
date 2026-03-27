@@ -3,7 +3,7 @@
 SHELL := /bin/zsh
 
 CLI_APPS := zplug rust go ripgrep fzf zoxide neovim lazygit yazi tmux
-GUI_APPS := karabiner-elements ghostty hammerspoon
+GUI_APPS := ghostty hammerspoon
 
 HAMMERSPOON_SOURCE := $(HOME)/.config/hammerspoon
 HAMMERSPOON_LINK := $(HOME)/.hammerspoon
@@ -124,5 +124,4 @@ notes:
 	@echo ""; \
 	echo "== Manual Follow-up =="; \
 	echo "- Hammerspoon may still need macOS Accessibility permission."; \
-	echo "- Karabiner-Elements may still need macOS Input Monitoring and Driver approval."; \
 	echo "- Ghostty and tmux configs are managed from ~/.config."
