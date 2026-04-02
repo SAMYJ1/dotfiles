@@ -40,8 +40,8 @@ export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
 # proxy list
-alias proxy='export http_proxy=http://127.0.0.1:7890
-export https_proxy=$http_proxy'
+PROXY="https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890"
+alias proxy="export $PROXY"
 alias unproxy='unset all_proxy http_proxy https_proxy'
 
 export EDITOR=nvim
