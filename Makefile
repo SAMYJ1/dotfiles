@@ -10,8 +10,11 @@ HAMMERSPOON_LINK := $(HOME)/.hammerspoon
 TMUX_SOURCE := $(HOME)/.config/tmux/tmux.conf
 TMUX_LINK := $(HOME)/.tmux.conf
 TMUX_TPM_DIR := $(HOME)/.config/tmux/plugins/tpm
+GHOSTTY_TERMINFO_SOURCE := /Applications/Ghostty.app/Contents/Resources/terminfo/78/xterm-ghostty
+GHOSTTY_TERMINFO_DEST_DIR := $(HOME)/.terminfo/78
+GHOSTTY_TERMINFO_DEST := $(GHOSTTY_TERMINFO_DEST_DIR)/xterm-ghostty
 
-.PHONY: bootstrap install check_brew install-packages install_upgrade_cli_apps install_upgrade_gui_apps link-configs link-hammerspoon link-tmux update-submodules install-tmux-plugins check-configs notes
+.PHONY: bootstrap install check_brew install-packages install_upgrade_cli_apps install_upgrade_gui_apps link-configs link-hammerspoon link-tmux update-submodules install-tmux-plugins install-ghostty-terminfo check-configs notes
 
 define ensure_symlink
 	@src="$(1)"; dst="$(2)"; \
@@ -32,7 +35,7 @@ define ensure_symlink
 	fi
 endef
 
-bootstrap: install-packages link-configs update-submodules install-tmux-plugins check-configs notes
+bootstrap: install-packages link-configs update-submodules install-tmux-plugins install-ghostty-terminfo check-configs notes
 
 install: bootstrap
 
@@ -83,6 +86,19 @@ install-tmux-plugins:
 	fi
 	@env -u TMUX "$(TMUX_TPM_DIR)/bin/install_plugins"
 
+install-ghostty-terminfo:
+	@if [ ! -f "$(GHOSTTY_TERMINFO_SOURCE)" ]; then \
+		echo "Ghostty terminfo not found at $(GHOSTTY_TERMINFO_SOURCE); skipping."; \
+	else \
+		mkdir -p "$(GHOSTTY_TERMINFO_DEST_DIR)"; \
+		if cmp -s "$(GHOSTTY_TERMINFO_SOURCE)" "$(GHOSTTY_TERMINFO_DEST)" 2>/dev/null; then \
+			echo "$(GHOSTTY_TERMINFO_DEST) already up to date"; \
+		else \
+			cp "$(GHOSTTY_TERMINFO_SOURCE)" "$(GHOSTTY_TERMINFO_DEST)"; \
+			echo "Installed Ghostty terminfo to $(GHOSTTY_TERMINFO_DEST)"; \
+		fi; \
+	fi
+
 check-configs:
 	@echo "== Brew =="; \
 	if command -v brew >/dev/null 2>&1; then \
@@ -118,6 +134,13 @@ check-configs:
 		echo "$(TMUX_LINK) -> $$(readlink "$(TMUX_LINK)")"; \
 	else \
 		echo "$(TMUX_LINK): missing or not a symlink"; \
+	fi; \
+	echo ""; \
+	echo "== Terminfo =="; \
+	if [ -f "$(GHOSTTY_TERMINFO_DEST)" ]; then \
+		echo "$(GHOSTTY_TERMINFO_DEST): installed"; \
+	else \
+		echo "$(GHOSTTY_TERMINFO_DEST): missing"; \
 	fi
 
 notes:

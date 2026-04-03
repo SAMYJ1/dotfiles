@@ -8,6 +8,9 @@ prepend_rules = [
   { url = "*.htm", use = ["edit", "browser", "reveal", "exif"] },
 ]
 
+[mgr]
+show_hidden = true
+
 [[mgr.prepend_keymap]]
 on = ["g", "r"]
 run = 'shell -- ya emit cd "$(git rev-parse --show-toplevel)"'
