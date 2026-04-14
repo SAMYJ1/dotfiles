@@ -27,7 +27,9 @@ local function load_local_configs()
   end
 end
 
+require("hs.ipc")
 require("modules.keymaps").setup()
+require("modules.hyper").setup()
 require("modules.paperwm").setup()
 require("modules.input_source").setup()
 
