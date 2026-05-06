@@ -31,6 +31,7 @@ karabiner/automatic_backups/
 
 !/nvim/
 !/nvim/**
+/nvim/lazy-lock.json
 
 !/tmux/
 !/tmux/**

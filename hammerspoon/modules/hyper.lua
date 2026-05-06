@@ -10,16 +10,9 @@ local function has_all_hyper_flags(event)
   return flags.cmd and flags.ctrl and flags.alt
 end
 
-local function setup_hyper_eventtap()
+local function setup_hyper_eventtap(action_map)
   local escape_keycode = hs.keycodes.map.escape
   local event_types = hs.eventtap.event.types
-
-  local arrow_map = {
-    [hs.keycodes.map.h] = hs.keycodes.map.left,
-    [hs.keycodes.map.j] = hs.keycodes.map.down,
-    [hs.keycodes.map.k] = hs.keycodes.map.up,
-    [hs.keycodes.map.l] = hs.keycodes.map.right,
-  }
 
   local escape_down = false
   local escape_pressed_at = nil
@@ -92,11 +85,14 @@ local function setup_hyper_eventtap()
         return false
       end
       chord_used = true
-      local arrow = arrow_map[key_code]
-      if arrow then
+      local action = action_map[key_code]
+      if type(action) == "table" then
         return true, {
-          hs.eventtap.event.newKeyEvent({}, arrow, true),
+          hs.eventtap.event.newKeyEvent(action.mods, action.keycode, true),
         }
+      elseif type(action) == "function" then
+        action()
+        return true
       end
       return true, {
         hs.eventtap.event.newKeyEvent(HYPER_MODS, key_code, true),
@@ -108,11 +104,14 @@ local function setup_hyper_eventtap()
       if has_all_hyper_flags(event) then
         return false
       end
-      local arrow = arrow_map[key_code]
-      if arrow then
-        return true, {
-          hs.eventtap.event.newKeyEvent({}, arrow, false),
-        }
+      if action_map[key_code] then
+        local action = action_map[key_code]
+        if type(action) == "table" then
+          return true, {
+            hs.eventtap.event.newKeyEvent(action.mods, action.keycode, false),
+          }
+        end
+        return true
       end
       return true, {
         hs.eventtap.event.newKeyEvent(HYPER_MODS, key_code, false),
@@ -138,8 +137,8 @@ local function setup_hyper_eventtap()
   return watcher
 end
 
-function M.setup()
-  hyper_watcher = setup_hyper_eventtap()
+function M.setup(action_map)
+  hyper_watcher = setup_hyper_eventtap(action_map or {})
 
   return {
     watcher = hyper_watcher,

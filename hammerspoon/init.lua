@@ -29,7 +29,7 @@ end
 
 require("hs.ipc")
 require("modules.keymaps").setup()
-require("modules.hyper").setup()
+require("modules.hyper").setup(require("modules.hyper_actions").map)
 require("modules.paperwm").setup()
 require("modules.input_source").setup()
 
