@@ -2,6 +2,32 @@ export PATH=$PATH:/opt/homebrew/bin
 export ZSH="$HOME/.oh-my-zsh"
 export XDG_CONFIG_HOME="$HOME/.config"
 
+# Keep terminal identity aligned with the actual emulator.
+# Ghostty needs its bundled terminfo, while Terminal.app/iTerm should not
+# advertise Ghostty's TERM value.
+GHOSTTY_TERMINFO_DIR="/Applications/Ghostty.app/Contents/Resources/terminfo"
+case "${TERM_PROGRAM:-}" in
+  Ghostty|ghostty)
+    if [[ "${TERM:-}" == "xterm-ghostty" && -d "$GHOSTTY_TERMINFO_DIR" ]]; then
+      export TERMINFO="$GHOSTTY_TERMINFO_DIR"
+    fi
+    ;;
+  Apple_Terminal|iTerm.app)
+    if [[ "${TERM:-}" == "xterm-ghostty" ]]; then
+      export TERM="xterm-256color"
+    fi
+    if [[ "${TERMINFO:-}" == "$GHOSTTY_TERMINFO_DIR" ]]; then
+      unset TERMINFO
+    fi
+    ;;
+esac
+
+# SSH does not forward TERM_PROGRAM, but it does preserve TERM. If the client
+# advertises Ghostty, make sure the remote shell can find Ghostty's terminfo.
+if [[ "${TERM:-}" == "xterm-ghostty" && -z "${TERMINFO:-}" && -d "$GHOSTTY_TERMINFO_DIR" ]]; then
+  export TERMINFO="$GHOSTTY_TERMINFO_DIR"
+fi
+
 # disable oh-my-zsh themes for pure prompt
 ZSH_THEME=""
 ZSH_DISABLE_COMPFIX=true
@@ -26,13 +52,13 @@ if [[ -z "$NVIM" ]]; then
     zplug "jeffreytse/zsh-vi-mode"
 fi
 zplug load
-# Install plugins if there are plugins that have not been installed
-if ! zplug check --verbose; then
-    printf "Install? [y/N]: "
-    if read -q; then
-        echo; zplug install
-    fi
-fi
+
+# Keep startup non-interactive and fast. Run this manually when maintaining
+# plugins instead of checking/updating on every new shell.
+zplug-maintain() {
+    zplug check --verbose || zplug install
+    zplug update
+}
 
 zstyle :prompt:pure:git:branch color green
 
@@ -50,12 +76,37 @@ alias v='nvim'
 alias t='tmux'
 alias zz='yazi'
 alias gg=lazygit
-eval "$(zoxide init zsh)"
-
-# codex CLI: fallback path + completion for zsh
-if [ -x "/Applications/Codex.app/Contents/Resources/codex" ]; then
-  export PATH="/Applications/Codex.app/Contents/Resources:$PATH"
+if command -v zoxide >/dev/null 2>&1; then
+    eval "$(zoxide init zsh)"
 fi
-if command -v codex >/dev/null 2>&1; then
-  source <(codex completion zsh)
+
+# fzf integration: key bindings/completion plus fd/bat-powered defaults when
+# available. Falls back cleanly if fd or bat are not installed.
+if command -v fd >/dev/null 2>&1; then
+    export FZF_DEFAULT_COMMAND='fd --type f --hidden --strip-cwd-prefix'
+else
+    export FZF_DEFAULT_COMMAND='find . -type f -not -path "*/.git/*" -print'
+fi
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS:-} --height=60% --layout=reverse --border=rounded --preview-window=right:65%:wrap:border-left"
+if command -v bat >/dev/null 2>&1; then
+    export FZF_CTRL_T_OPTS="${FZF_CTRL_T_OPTS:-} --preview 'bat --color=always --style=plain,numbers --line-range=:500 {}'"
+fi
+if [[ -o interactive && -t 0 ]]; then
+    if [[ -f /opt/homebrew/opt/fzf/shell/key-bindings.zsh ]]; then
+        source /opt/homebrew/opt/fzf/shell/key-bindings.zsh
+    fi
+    if [[ -f /opt/homebrew/opt/fzf/shell/completion.zsh ]]; then
+        source /opt/homebrew/opt/fzf/shell/completion.zsh
+    fi
+fi
+
+# codex CLI: expose the bundled binary without prepending its Resources
+# directory to PATH; that directory also contains node and can override fnm.
+CODEX_CLI="/Applications/Codex.app/Contents/Resources/codex"
+if [[ -x "$CODEX_CLI" ]]; then
+    alias codex="$CODEX_CLI"
+    source <("$CODEX_CLI" completion zsh)
+elif command -v codex >/dev/null 2>&1; then
+    source <(codex completion zsh)
 fi
