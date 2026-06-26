@@ -7,6 +7,15 @@ return {
       "nvim-treesitter/nvim-treesitter",
       "nvim-tree/nvim-web-devicons",
     },
+    opts = {
+      markdown = {
+        list_items = {
+          marker_minus = { text = "", add_padding = false },
+          marker_plus = { text = "", add_padding = false },
+          marker_star = { text = "", add_padding = false },
+        },
+      },
+    },
   },
 
   -- disable spell checking for markdown (override LazyVim's wrap_spell autocmd)
