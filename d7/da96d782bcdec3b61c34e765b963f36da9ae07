@@ -1,0 +1,36 @@
+tmux/tmux.conf
+  s_17294458acc7e5::t_565a2e4a8a827e 28
+nvim/lua/plugins/typescript.lua
+  c5c4fdb2c71d7040 1-63
+nvim/lua/config/options.lua
+  c5c4fdb2c71d7040 7-8
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.34-trip",
+  "base_commit_sha": "d7da96d782bcdec3b61c34e765b963f36da9ae07",
+  "prompts": {
+    "c5c4fdb2c71d7040": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f2fa8256-a159-46e8-acd3-f88b1d28fec8",
+        "model": "global.anthropic.claude-opus-4-7"
+      },
+      "human_author": "eugene <eugene_ma@gmail.com>",
+      "total_additions": 65,
+      "total_deletions": 0,
+      "accepted_lines": 65,
+      "overriden_lines": 0
+    }
+  },
+  "sessions": {
+    "s_17294458acc7e5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e5947650-5e67-4cf2-b099-47d23b7d0086",
+        "model": "arn:aws:bedrock:us-west-2:133197901387:application-inference-profile/ypvzpmevzxdl"
+      },
+      "human_author": "eugene <eugene_ma@gmail.com>"
+    }
+  }
+}
