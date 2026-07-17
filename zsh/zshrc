@@ -101,12 +101,3 @@ if [[ -o interactive && -t 0 ]]; then
     fi
 fi
 
-# codex CLI: expose the bundled binary without prepending its Resources
-# directory to PATH; that directory also contains node and can override fnm.
-CODEX_CLI="/Applications/Codex.app/Contents/Resources/codex"
-if [[ -x "$CODEX_CLI" ]]; then
-    alias codex="$CODEX_CLI"
-    source <("$CODEX_CLI" completion zsh)
-elif command -v codex >/dev/null 2>&1; then
-    source <(codex completion zsh)
-fi
